@@ -1,4 +1,5 @@
 import os
+import logging
 import db
 import typing as tp
 
@@ -12,9 +13,12 @@ from bot import Messages, Utils
 from configs import Config
 from zvonok_api.Api import ZvonokManager
 
+logger = logging.getLogger(__name__)
+
 
 class AlarmCallBot:
     def __init__(self, config: tp.Union[Config.TestConfig, Config.ProdConfig]) -> None:
+        self.__config = config
         self.__zvonok_manager = ZvonokManager(
             public_api_key=config.ZVONOK_API_TOKEN,
             campaign_id=config.ZVONOK_CAMPAIGN_ID,
@@ -30,39 +34,48 @@ class AlarmCallBot:
 
         @self.__bot.message_handler(commands=["start"])
         def __start(message: telebot.types.Message, res=False):
+            logger.info(f"Start message from user with id = {message.from_user.id}")
             self.__bot.send_message(message.chat.id, Messages.START_MESSAGE, parse_mode="Markdown")
 
         @self.__bot.message_handler(commands=["call"])
         def call(message: telebot.types.Message):
+            logger.info(f"Call message from user with id = {message.from_user.id}")
             if len(db.get_phone(message.from_user.id)) == 0:
+                logger.info(f"No number saved for user with id = {message.from_user.id}")
                 self.__bot.send_message(message.chat.id, Messages.NO_NUMBER_SAVED_MESSAGE, parse_mode="Markdown")
             else:
                 try:
                     hours = Utils.parse_hours(message.text)
+                    logger.debug(f"User with id = {message.from_user.id} add call for {hours} hours")
                 except Exception as e:
+                    logger.warning(f"Can't parse hours from message = {message.text}")
                     self.__bot.send_message(message.chat.id, f"Ошибка в команде: {str(e)}")
                     return
                 
                 date_created = datetime.now()
                 date_expired = date_created + timedelta(hours=hours)
+                logger.debug(f"Creating call for user with id = {message.from_user.id} until {date_expired.strftime('%m/%d/%Y, %H:%M')}")
                 db.add_call(message.from_user.id, date_created, date_expired)
                 self.__bot.send_message(message.chat.id, "Поставлен дозвон до " + date_expired.strftime("%m/%d/%Y, %H:%M"))
 
         @self.__bot.channel_post_handler(content_types=["text"])
         def new_channel_post(message: telebot.types.Message):
             phones_to_call = db.get_phones_to_call(datetime.now())
+            logger.info(f"Setting calls for phones = ({','.join(phones_to_call)})")
             for phone in phones_to_call:
                 self.__zvonok_manager.create_call(phone)
 
         @self.__bot.message_handler(commands=["number"])
         def phone(message: telebot.types.Message):
             if message.chat.type != "private":
+                logger.debug(f"Message /number was sent in public chat from user with id = {message.from_user.id}")
                 self.__bot.send_message(
                     message.chat.id,
                     "Номер можно добавить только в личных сообщениях с ботом"
                 )
                 return 
             if len(db.get_phone(message.from_user.id)) == 0:
+                logger.info(f"Get number from user with id = {message.from_user.id}")
                 keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
                 button_phone = types.KeyboardButton(text="Отправить телефон", request_contact=True)
                 keyboard.add(button_phone)
@@ -72,10 +85,12 @@ class AlarmCallBot:
                     reply_markup=keyboard
                 )
             else:
+                logger.info(f"Number from user with id = {message.from_user.id} already saved")
                 self.__bot.send_message(message.chat.id, "Ваш номер уже сохранен в базе данных")
 
         @self.__bot.message_handler(content_types=["contact"])
         def contact(message: telebot.types.Message):
+            logger.info(f"Message with contact from user with id = {message.from_user.id}")
             if message.contact is not None:
                 db.add_phone(message.from_user.id, message.contact.phone_number)
 

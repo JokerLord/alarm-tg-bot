@@ -1,4 +1,6 @@
 import argparse
+import logging
+import logging.config
 
 from bot.Bot import AlarmCallBot
 from configs import Config
@@ -17,5 +19,23 @@ if __name__ == "__main__":
     else:
         config = Config.ProdConfig()
 
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(asctime)s [%(levelname)s] %(message)s",
+        handlers=[
+            logging.FileHandler("log_file.log"),
+            logging.StreamHandler()
+        ]
+    )
+
+    logger = logging.getLogger(__name__)
+
+    logger.info(f"Starting bot with environment = {args.env}")
     bot = AlarmCallBot(config=config)
+    try:
+        bot.start_polling()
+    except Exception as exc:
+        print(f"Unknown exception: {exc}")
+    logger.info("Start polling...")
     bot.start_polling()
+

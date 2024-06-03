@@ -1,8 +1,10 @@
+import logging
 import requests
 from requests.adapters import HTTPAdapter, Retry
 
 from zvonok_api.Utils import check_request
 
+logger = logging.getLogger(__name__)
 
 class ZvonokManager:
     def __init__(
@@ -38,6 +40,7 @@ class ZvonokManager:
 
     @check_request
     def create_call(self, phone: str) -> requests.Response:
+        logger.info(f"Create call for phone = {phone}")
         payload = {
             "public_key": self.__public_api_key,
             "phone": phone,
@@ -48,6 +51,7 @@ class ZvonokManager:
     
     @check_request
     def delete_call(self, phone: str) -> requests.Response:
+        logger.info(f"Delete call for phone = {phone}")
         payload = {
             "public_key": self.__public_api_key,
             "phone": phone,
@@ -58,6 +62,7 @@ class ZvonokManager:
     
     @check_request
     def check_call(self, phone: str) -> requests.Response:
+        logger.info(f"Check call for phone = {phone}")
         payload = {
             "public_key": self.__public_api_key,
             "phone": phone,
