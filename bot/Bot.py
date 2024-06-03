@@ -15,6 +15,11 @@ from zvonok_api.Api import ZvonokManager
 
 logger = logging.getLogger(__name__)
 
+class ExceptionHandler(telebot.ExceptionHandler):
+    def handle(self, exception):
+        logger.error(f"Unknown exception: {exception}")
+        return True
+
 
 class AlarmCallBot:
     def __init__(self, config: tp.Union[Config.TestConfig, Config.ProdConfig]) -> None:
@@ -30,7 +35,7 @@ class AlarmCallBot:
         if TELEGRAM_API_TOKEN is None:
             raise RuntimeError("Set TELEGRAM_API_TOKEN env. variable")
         
-        self.__bot = telebot.TeleBot(TELEGRAM_API_TOKEN)
+        self.__bot = telebot.TeleBot(TELEGRAM_API_TOKEN, exception_handler=ExceptionHandler)
 
         @self.__bot.message_handler(commands=["start"])
         def __start(message: telebot.types.Message, res=False):
