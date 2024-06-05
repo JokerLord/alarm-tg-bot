@@ -24,7 +24,7 @@ def check_request(request_func):
         try:
             resp_data = resp.json()
         except Exception:
-            raise ZvonokApiException(f"Failed to parse json from Zvonok api response")
+            raise ZvonokApiException("Failed to parse json from Zvonok api response")
         if resp_data.get("status") == "error":
             raise ZvonokApiException(f"Zvonok api responded with error = {resp_data}")
 

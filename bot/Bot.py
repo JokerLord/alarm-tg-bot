@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 import telebot
 from telebot import types
 
-import db
 from bot import Messages, Utils
 from configs import Config
 from zvonok_api.Api import ZvonokManager
@@ -79,7 +78,8 @@ class AlarmCallBot:
                 date_created = datetime.now()
                 date_expired = date_created + timedelta(hours=hours)
                 logger.info(
-                    f"Creating call for user with id = {message.from_user.id} until {date_expired.strftime('%m/%d/%Y, %H:%M')}"
+                    f"Creating call for user with id = {message.from_user.id}"
+                    f"until {date_expired.strftime('%m/%d/%Y, %H:%M')}"
                 )
                 db.add_call(message.from_user.id, date_created, date_expired)
                 self.__bot.send_message(
