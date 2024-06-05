@@ -1,6 +1,7 @@
 import argparse
-import logging
 import logging.config
+import os
+from logging.handlers import TimedRotatingFileHandler
 
 from bot.Bot import AlarmCallBot
 from configs import Config
@@ -19,13 +20,23 @@ if __name__ == "__main__":
     else:
         config = Config.ProdConfig()
 
+    # Setup logging
+    os.makedirs(config.LOG_FILE_PATH, exist_ok=True)
+    rotating_file_handler = TimedRotatingFileHandler(
+        f"{config.LOG_FILE_PATH}/{config.LOG_FILE_NAME}",
+        when="midnight",
+        backupCount=30
+    )
+    rotating_file_handler.setLevel(logging.INFO)
+    logging_handlers = []
+    if config.DEBUG:
+        logging_handlers.append(logging.StreamHandler())
+    logging_handlers.append(rotating_file_handler)
+
     logging.basicConfig(
-        level=logging.DEBUG,
+        level=logging.DEBUG if config.DEBUG else logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=[
-            logging.FileHandler("log_file.log"),
-            logging.StreamHandler()
-        ]
+        handlers=logging_handlers
     )
 
     logger = logging.getLogger(__name__)

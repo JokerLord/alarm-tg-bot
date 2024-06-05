@@ -1,6 +1,6 @@
 __pycache__/
+logs/
 Pipfile
 Pipfile.lock
 
 *.db
-*.log

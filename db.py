@@ -1,6 +1,7 @@
 import sqlite3
 import datetime
 import argparse
+import typing as tp
 
 __connection = None
 
@@ -12,7 +13,7 @@ def get_connection():
     return __connection
 
 
-def init_db(force: bool = False):
+def init_db(force: bool = False) -> None:
     conn = get_connection()
     c = conn.cursor()
     if force:
@@ -35,7 +36,7 @@ def init_db(force: bool = False):
     """)
     conn.commit()
 
-def add_call(user_id: int, date_created: datetime, date_expired: datetime):
+def add_call(user_id: int, date_created: datetime, date_expired: datetime) -> None:
     conn = get_connection()
     c = conn.cursor()
     c.execute(
@@ -44,7 +45,7 @@ def add_call(user_id: int, date_created: datetime, date_expired: datetime):
     )
     conn.commit()
 
-def add_phone(user_id: int, phone: str):
+def add_phone(user_id: int, phone: str) -> None:
     conn = get_connection()
     c = conn.cursor()
     c.execute(
@@ -52,13 +53,16 @@ def add_phone(user_id: int, phone: str):
         (user_id, phone)
     )
 
-def get_phone(user_id: int):
+def get_phone(user_id: int) -> tp.Optional[str]:
     conn = get_connection()
     c = conn.cursor()
     c.execute("SELECT phone FROM phones WHERE user_id=?", (user_id,))
-    return c.fetchall()
+    res = c.fetchall()
+    if len(res) == 0:
+        return None
+    return res[0]
 
-def get_phones_to_call(time: datetime):
+def get_phones_to_call(time: datetime) -> tp.List[str]:
     conn = get_connection()
     c = conn.cursor()
     c.execute(

@@ -49,7 +49,7 @@ class AlarmCallBot:
             if not self.__check_private_chat(message):
                 return
             logger.info(f"Call message from user with id = {message.from_user.id}")
-            if len(db.get_phone(message.from_user.id)) == 0:
+            if db.get_phone(message.from_user.id) is None:
                 logger.info(f"No number saved for user with id = {message.from_user.id}")
                 self.__bot.send_message(message.chat.id, Messages.NO_NUMBER_SAVED_MESSAGE, parse_mode="Markdown")
             else:
@@ -63,7 +63,7 @@ class AlarmCallBot:
                 
                 date_created = datetime.now()
                 date_expired = date_created + timedelta(hours=hours)
-                logger.debug(f"Creating call for user with id = {message.from_user.id} until {date_expired.strftime('%m/%d/%Y, %H:%M')}")
+                logger.info(f"Creating call for user with id = {message.from_user.id} until {date_expired.strftime('%m/%d/%Y, %H:%M')}")
                 db.add_call(message.from_user.id, date_created, date_expired)
                 self.__bot.send_message(message.chat.id, "Поставлен дозвон до " + date_expired.strftime("%m/%d/%Y, %H:%M"))
 
