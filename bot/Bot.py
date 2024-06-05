@@ -65,6 +65,9 @@ class AlarmCallBot:
 
         @self.__bot.channel_post_handler(content_types=["text"])
         def new_channel_post(message: telebot.types.Message):
+            if message.chat.id not in self.__config.CHANNELS_WITH_ALERTS:
+                logger.debug(f"Bot found message in chat with id = {message.chat.id}, but it's not in alerts channels")
+                return
             phones_to_call = db.get_phones_to_call(datetime.now())
             logger.info(f"Setting calls for phones = ({','.join(phones_to_call)})")
             for phone in phones_to_call:
