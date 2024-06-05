@@ -130,6 +130,7 @@ class AlarmCallBot:
             )
             if message.contact is not None:
                 db.add_phone(message.from_user.id, message.contact.phone_number)
+                self.__bot.send_message(message.chat.id, 'Номер успешно добавлен!')
 
     def start_polling(self):
         self.__bot.polling(none_stop=True, interval=0)
