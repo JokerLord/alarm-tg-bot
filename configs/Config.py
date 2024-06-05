@@ -5,7 +5,7 @@ from dataclasses import dataclass
 @dataclass
 class BaseConfig:
     ZVONOK_API_URI: str
-    ZVONOK_API_TOKEN: str = os.getenv('ZVONOK_API_TOKEN') 
+    ZVONOK_API_TOKEN: str = os.getenv("ZVONOK_API_TOKEN")
     ZVONOK_CAMPAIGN_ID: str = "270119321"
 
     CHANNELS_WITH_ALERTS = {-1002194118218}

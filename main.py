@@ -9,7 +9,13 @@ from configs import Config
 
 def parse_args():
     parser = argparse.ArgumentParser(prog="Alarm Call Telegram Bot")
-    parser.add_argument("--env", type=str, default="testing", choices=["testing", "production"], help="Environment to run bot")
+    parser.add_argument(
+        "--env",
+        type=str,
+        default="testing",
+        choices=["testing", "production"],
+        help="Environment to run bot",
+    )
     return parser.parse_args()
 
 
@@ -17,6 +23,11 @@ if __name__ == "__main__":
     args = parse_args()
     if args.env == "testing":
         config = Config.TestConfig()
+        if os.getenv("TELEGAM_API_TOKEN_TEST") is None:
+            raise RuntimeError(
+                "Set TELEGRAM_API_TOKEN_TEST to run in testing environment"
+            )
+        os.environ["TELEGRAM_API_TOKEN"] = os.getenv("TELEGRAM_API_TOKEN_TEST")
     else:
         config = Config.ProdConfig()
 
@@ -25,7 +36,7 @@ if __name__ == "__main__":
     rotating_file_handler = TimedRotatingFileHandler(
         f"{config.LOG_FILE_PATH}/{config.LOG_FILE_NAME}",
         when="midnight",
-        backupCount=30
+        backupCount=30,
     )
     rotating_file_handler.setLevel(logging.INFO)
     logging_handlers = []
@@ -34,9 +45,9 @@ if __name__ == "__main__":
     logging_handlers.append(rotating_file_handler)
 
     logging.basicConfig(
-        level=logging.DEBUG if config.DEBUG else logging.INFO,
+        level=logging.INFO,
         format="%(asctime)s [%(levelname)s] %(message)s",
-        handlers=logging_handlers
+        handlers=logging_handlers,
     )
 
     logger = logging.getLogger(__name__)
@@ -49,4 +60,3 @@ if __name__ == "__main__":
         print(f"Unknown exception: {exc}")
     logger.info("Start polling...")
     bot.start_polling()
-
