@@ -39,11 +39,15 @@ class AlarmCallBot:
 
         @self.__bot.message_handler(commands=["start"])
         def __start(message: telebot.types.Message, res=False):
+            if not self.__check_private_chat(message):
+                return
             logger.info(f"Start message from user with id = {message.from_user.id}")
             self.__bot.send_message(message.chat.id, Messages.START_MESSAGE, parse_mode="Markdown")
 
         @self.__bot.message_handler(commands=["call"])
         def call(message: telebot.types.Message):
+            if not self.__check_private_chat(message):
+                return
             logger.info(f"Call message from user with id = {message.from_user.id}")
             if len(db.get_phone(message.from_user.id)) == 0:
                 logger.info(f"No number saved for user with id = {message.from_user.id}")
@@ -75,13 +79,8 @@ class AlarmCallBot:
 
         @self.__bot.message_handler(commands=["number"])
         def phone(message: telebot.types.Message):
-            if message.chat.type != "private":
-                logger.debug(f"Message /number was sent in public chat from user with id = {message.from_user.id}")
-                self.__bot.send_message(
-                    message.chat.id,
-                    "Номер можно добавить только в личных сообщениях с ботом"
-                )
-                return 
+            if not self.__check_private_chat(message):
+                return
             if len(db.get_phone(message.from_user.id)) == 0:
                 logger.info(f"Get number from user with id = {message.from_user.id}")
                 keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
@@ -105,5 +104,15 @@ class AlarmCallBot:
 
     def start_polling(self):
         self.__bot.polling(none_stop=True, interval=0)
+
+    def __check_private_chat(self, message: telebot.types.Message) -> bool:
+        if message.chat.type != "private":
+            logger.debug(f"Message /number was sent in public chat from user with id = {message.from_user.id}")
+            self.__bot.send_message(
+                message.chat.id,
+                "Для использования бота пишите ему в личные сообщения"
+            )
+            return False
+        return True
 
     
