@@ -1,5 +1,7 @@
+"""Zvonok manager class module."""
 import logging
 import requests
+import typing as tp
 from requests.adapters import HTTPAdapter, Retry
 
 from zvonok_api.Utils import check_request
@@ -8,15 +10,20 @@ logger = logging.getLogger(__name__)
 
 
 class ZvonokManager:
-    def __init__(
-        self,
-        public_api_key: str,
-        campaign_id: str,
-        api_host: str,
-        n_retries: int = 3,
-        backoff_factor: float = 0.1,
-        debug: bool = False,
-    ) -> None:
+    """Zvonok manager class."""
+
+    def __init__(self, public_api_key: tp.Optional[str], campaign_id: str, api_host: str, n_retries: int = 3,
+                 backoff_factor: float = 0.1) -> None:
+        """
+        Zvonok manager constructor.
+
+        Arguments:
+            public_api_key (str): Zvonok API public key.
+            campaign_id (str): Zvonok campaign ID.
+            api_host (str): URI of call request server.
+            n_retries (int, optional): Total number of connection retries allowed.
+            backoff_factor (float, 0.1): A backoff factor to apply between attempts after the second try.
+        """
         self.__public_api_key = public_api_key
         self.__campaign_id = campaign_id
         self.__api_host = api_host
@@ -31,8 +38,6 @@ class ZvonokManager:
         self.__requests_session = requests.Session()
         self.__requests_session.mount("https://", HTTPAdapter(max_retries=retries))
 
-        self.__debug = debug
-
         self.__api_urls = {
             "create_call": "/manager/cabapi_external/api/v1/phones/call",
             "delete_call": "/manager/cabapi_external/api/v1/phones/remove_call",
@@ -41,6 +46,12 @@ class ZvonokManager:
 
     @check_request
     def create_call(self, phone: str) -> requests.Response:
+        """
+        Create call for phone given.
+
+        Arguments:
+            phone (str): Given phone to call.
+        """
         logger.info(f"Create call for phone = {phone}")
         payload = {
             "public_key": self.__public_api_key,
@@ -54,6 +65,12 @@ class ZvonokManager:
 
     @check_request
     def delete_call(self, phone: str) -> requests.Response:
+        """
+        Delete call for phone given.
+
+        Arguments:
+            phone (str): Given phone to delete call for.
+        """
         logger.info(f"Delete call for phone = {phone}")
         payload = {
             "public_key": self.__public_api_key,
@@ -67,6 +84,12 @@ class ZvonokManager:
 
     @check_request
     def check_call(self, phone: str) -> requests.Response:
+        """
+        Check call for phone given.
+
+        Arguments:
+            phone (str): Given phone to check call for.
+        """
         logger.info(f"Check call for phone = {phone}")
         payload = {
             "public_key": self.__public_api_key,

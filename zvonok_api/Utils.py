@@ -1,21 +1,22 @@
+"""Utility functions for zvonok manager."""
 import requests
 import logging
+import typing as tp
 from functools import wraps
 
 logger = logging.getLogger(__name__)
 
 
 class ZvonokApiException(Exception):
+    """Custom zvonok API exception."""
+
     pass
 
 
-def check_request(request_func):
-    """
-    Decorator for status checking of API response
-    """
-
+def check_request(request_func: tp.Callable):
+    """Decorate for status checking of zvonok API response."""
     @wraps(request_func)
-    def _wrapper(*args, **kwargs):
+    def __wrapper(*args, **kwargs):
         resp: requests.Response = request_func(*args, **kwargs)
         if resp.status_code >= 400:
             raise ZvonokApiException(
@@ -30,4 +31,4 @@ def check_request(request_func):
 
         return resp_data
 
-    return _wrapper
+    return __wrapper

@@ -1,3 +1,4 @@
+"""Module with Alarm call bot class."""
 import os
 import logging
 import db
@@ -16,19 +17,34 @@ logger = logging.getLogger(__name__)
 
 
 class ExceptionHandler(telebot.ExceptionHandler):
-    def handle(self, exception):
+    """Telegram bot exception handler."""
+
+    def handle(self, exception) -> bool:
+        """
+        Log unknown exception into logger.
+
+        Retuns:
+            True value.
+        """
         logger.error(f"Unknown exception: {exception}")
         return True
 
 
 class AlarmCallBot:
+    """Alarm call bot class."""
+
     def __init__(self, config: tp.Union[Config.TestConfig, Config.ProdConfig]) -> None:
+        """
+        Alarm call bot constructor.
+
+        Arguments:
+            config (TestConfig | ProdConfig): Data class with config information.
+        """
         self.__config = config
         self.__zvonok_manager = ZvonokManager(
             public_api_key=config.ZVONOK_API_TOKEN,
             campaign_id=config.ZVONOK_CAMPAIGN_ID,
             api_host=config.ZVONOK_API_URI,
-            debug=config.DEBUG,
         )
 
         TELEGRAM_API_TOKEN = os.getenv("TELEGRAM_API_TOKEN")
@@ -64,7 +80,7 @@ class AlarmCallBot:
                 )
             else:
                 try:
-                    hours = Utils.parse_hours(message.text)
+                    hours = Utils.parse_call_hours(message.text)
                     logger.info(
                         f"User with id = {message.from_user.id} add call for {hours} hours"
                     )
@@ -133,6 +149,7 @@ class AlarmCallBot:
                 self.__bot.send_message(message.chat.id, 'Номер успешно добавлен!')
 
     def start_polling(self):
+        """Start bot polling."""
         self.__bot.polling(none_stop=True, interval=0)
 
     def __check_private_chat(self, message: telebot.types.Message) -> bool:

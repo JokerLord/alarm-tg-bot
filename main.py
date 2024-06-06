@@ -1,3 +1,4 @@
+"""Bot start module."""
 import argparse
 import logging.config
 import os
@@ -7,7 +8,8 @@ from bot.Bot import AlarmCallBot
 from configs import Config
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
+    """Parse arguments for main.py."""
     parser = argparse.ArgumentParser(prog="Alarm Call Telegram Bot")
     parser.add_argument(
         "--env",
@@ -27,7 +29,8 @@ if __name__ == "__main__":
             raise RuntimeError(
                 "Set TELEGRAM_API_TOKEN_TEST to run in testing environment"
             )
-        os.environ["TELEGRAM_API_TOKEN"] = os.getenv("TELEGRAM_API_TOKEN_TEST")
+        else:
+            os.environ["TELEGRAM_API_TOKEN"] = os.getenv("TELEGRAM_API_TOKEN_TEST")
     else:
         config = Config.ProdConfig()
 
