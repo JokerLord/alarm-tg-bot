@@ -1,7 +1,7 @@
 """Config module."""
 import os
 import typing as tp
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -22,7 +22,7 @@ class BaseConfig:
     ZVONOK_API_TOKEN: tp.Optional[str] = os.getenv("ZVONOK_API_TOKEN")
     ZVONOK_CAMPAIGN_ID: str = "270119321"
 
-    CHANNELS_WITH_ALERTS: set = {-1002194118218}
+    CHANNELS_WITH_ALERTS: set = field(default_factory=lambda: {-1002194118218})
     LOG_FILE_NAME: str = "alarm_call_bot.log"
 
 

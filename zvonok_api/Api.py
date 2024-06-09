@@ -10,20 +10,20 @@ logger = logging.getLogger(__name__)
 
 
 class ZvonokManager:
-    """Zvonok manager class."""
+    """
+    Zvonok manager class.
+
+    Arguments:
+        public_api_key: Zvonok API public key.
+        campaign_id: Zvonok campaign ID.
+        api_host: URI of call request server.
+        n_retries: Total number of connection retries allowed.
+        backoff_factor: A backoff factor to apply between attempts after the second try.
+    """
 
     def __init__(self, public_api_key: tp.Optional[str], campaign_id: str, api_host: str, n_retries: int = 3,
                  backoff_factor: float = 0.1) -> None:
-        """
-        Zvonok manager constructor.
-
-        Arguments:
-            public_api_key (str): Zvonok API public key.
-            campaign_id (str): Zvonok campaign ID.
-            api_host (str): URI of call request server.
-            n_retries (int, optional): Total number of connection retries allowed.
-            backoff_factor (float, 0.1): A backoff factor to apply between attempts after the second try.
-        """
+        """Create requests session."""
         self.__public_api_key = public_api_key
         self.__campaign_id = campaign_id
         self.__api_host = api_host
@@ -50,7 +50,7 @@ class ZvonokManager:
         Create call for phone given.
 
         Arguments:
-            phone (str): Given phone to call.
+            phone: Given phone to call.
         """
         logger.info(f"Create call for phone = {phone}")
         payload = {
@@ -69,7 +69,7 @@ class ZvonokManager:
         Delete call for phone given.
 
         Arguments:
-            phone (str): Given phone to delete call for.
+            phone: Given phone to delete call for.
         """
         logger.info(f"Delete call for phone = {phone}")
         payload = {
@@ -88,7 +88,7 @@ class ZvonokManager:
         Check call for phone given.
 
         Arguments:
-            phone (str): Given phone to check call for.
+            phone: Given phone to check call for.
         """
         logger.info(f"Check call for phone = {phone}")
         payload = {

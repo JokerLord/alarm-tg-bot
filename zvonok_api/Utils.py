@@ -13,7 +13,7 @@ class ZvonokApiException(Exception):
     pass
 
 
-def check_request(request_func: tp.Callable):
+def check_request(request_func: tp.Callable) -> tp.Callable:
     """Decorate for status checking of zvonok API response."""
     @wraps(request_func)
     def __wrapper(*args, **kwargs):

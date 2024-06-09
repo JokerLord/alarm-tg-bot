@@ -24,7 +24,7 @@ def init_db(force: bool = False) -> None:
         phones (user_id, phone).
 
     Arguments:
-        force (bool): It True, drops tables before creating, it they exist. Default: False.
+        force: It True, drops tables before creating, it they exist. Default: False.
     """
     conn = get_connection()
     c = conn.cursor()
@@ -58,9 +58,9 @@ def add_call(user_id: int, date_created: datetime.datetime, date_expired: dateti
     Add call into table 'calls'.
 
     Arguments:
-        user_id (int): Bot user id in Telegram.
-        date_created (datetime): Call creating time.
-        date_expired (datetime): Call expiring time.
+        user_id: Bot user id in Telegram.
+        date_created: Call creating time.
+        date_expired: Call expiring time.
     """
     conn = get_connection()
     c = conn.cursor()
@@ -76,8 +76,8 @@ def add_phone(user_id: int, phone: str) -> None:
     Add user phone into table 'phones'.
 
     Arguments:
-        user_id (int): Bot user id in Telegram.
-        phone (str): Bot user phone in Telegram.
+        user_id: Bot user id in Telegram.
+        phone: Bot user phone in Telegram.
     """
     conn = get_connection()
     c = conn.cursor()
@@ -89,10 +89,10 @@ def get_phone(user_id: int) -> tp.Optional[str]:
     Get user phone by his Telegram id.
 
     Arguments:
-        user_id (int): Bot user id in Telegram.
+        user_id: Bot user id in Telegram.
 
     Returns:
-        phone (str, optional): User phone in Telegram.
+        phone: User phone in Telegram.
     """
     conn = get_connection()
     c = conn.cursor()
@@ -108,10 +108,10 @@ def get_phones_to_call(time: datetime.datetime) -> tp.List[str]:
     Get phones from all non-expired calls.
 
     Arguments:
-        time (datetime): Current datetime.
+        time: Current datetime.
 
     Returns:
-        phones (tp.List[str]): List of phones.
+        phones: List of phones.
     """
     conn = get_connection()
     c = conn.cursor()
