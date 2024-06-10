@@ -9,7 +9,6 @@ from datetime import datetime, timedelta
 import telebot
 from telebot import types
 
-from bot import Messages
 from configs import Config
 from zvonok_api.Api import ZvonokManager
 from bot.Utils import _, check_private_chat, parse_call_hours
@@ -70,7 +69,9 @@ class AlarmCallBot:
                 return
             logger.info(f"Start message from user with id = {message.from_user.id}")
             self.__bot.send_message(
-                message.chat.id, _(Messages.START_MESSAGE), parse_mode="Markdown"
+                message.chat.id,
+                _("To set the call for N hours when urgent search fee appears use */call N* command"),
+                parse_mode="Markdown"
             )
 
         @self.__bot.message_handler(commands=["call"])
@@ -89,7 +90,8 @@ class AlarmCallBot:
                 )
                 self.__bot.send_message(
                     message.chat.id,
-                    Messages.NO_NUMBER_SAVED_MESSAGE,
+                    _("There is no information which phone to set call for."
+                      "Send your phone number with the command */number* in bot private messages"),
                     parse_mode="Markdown",
                 )
             else:
@@ -101,7 +103,6 @@ class AlarmCallBot:
                 except Exception as e:
                     logger.warning(f"Can't parse hours from message = {message.text}")
                     self.__bot.send_message(
-                        # message.chat.id, f"Ошибка в команде: {str(e)}"
                         message.chat.id, _("Error in command: {}").format(str(e))
                     )
                     return
@@ -115,8 +116,7 @@ class AlarmCallBot:
                 db.add_call(message.from_user.id, date_created, date_expired)
                 self.__bot.send_message(
                     message.chat.id,
-                    # "Поставлен дозвон до " + date_expired.strftime("%m/%d/%Y, %H:%M"),
-                    _("The call is set until ") + date_expired.strftime("%m/%d/%Y, %H:%M")  # MESSAGE TO TRANSLATE
+                    _("The call is set until ") + date_expired.strftime("%m/%d/%Y, %H:%M")
                 )
 
         @self.__bot.channel_post_handler(content_types=["text"])
@@ -149,14 +149,12 @@ class AlarmCallBot:
                 logger.info(f"Get number from user with id = {message.from_user.id}")
                 keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True)
                 button_phone = types.KeyboardButton(
-                    # text="Отправить телефон", request_contact=True
                     text=_("Send phone number"), request_contact=True
                 )
                 keyboard.add(button_phone)
                 self.__bot.send_message(
                     message.chat.id,
-                    # "Отправьте свой номер телефона нажав на кнопку",
-                    _("Send your phone number by clicking the button"),  # MESSAGE TO TRANSLATE
+                    _("Send your phone number by clicking the button"),
                     reply_markup=keyboard,
                 )
             else:
@@ -164,7 +162,6 @@ class AlarmCallBot:
                     f"Number from user with id = {message.from_user.id} already saved"
                 )
                 self.__bot.send_message(
-                    # message.chat.id, "Ваш номер уже сохранен в базе данных"
                     message.chat.id, _("Your phone number is already saved in the database")
                 )
 
@@ -180,7 +177,6 @@ class AlarmCallBot:
             )
             if message.contact is not None:
                 db.add_phone(message.from_user.id, message.contact.phone_number)
-                # bot.send_message(message.chat.id, 'Номер успешно добавлен!')
                 self.__bot.send_message(message.chat.id, _("Phone number successfully added!"))
 
     def start_polling(self):

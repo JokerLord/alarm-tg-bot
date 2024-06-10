@@ -8,3 +8,5 @@ Pipfile
 Pipfile.lock
 
 *.db
+*.pot
+*.mo
