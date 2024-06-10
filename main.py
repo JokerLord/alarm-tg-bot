@@ -25,7 +25,7 @@ if __name__ == "__main__":
     args = parse_args()
     if args.env == "testing":
         config = Config.TestConfig()
-        if os.getenv("TELEGAM_API_TOKEN_TEST") is None:
+        if os.getenv("TELEGRAM_API_TOKEN_TEST") is None:
             raise RuntimeError(
                 "Set TELEGRAM_API_TOKEN_TEST to run in testing environment"
             )
