@@ -39,9 +39,9 @@ class ZvonokManager:
         self.__requests_session.mount("https://", HTTPAdapter(max_retries=retries))
 
         self.__api_urls = {
-            "create_call": "/manager/cabapi_external/api/v1/phones/call",
-            "delete_call": "/manager/cabapi_external/api/v1/phones/remove_call",
-            "check_call_by_phone": "/manager/cabapi_external/api/v1/phones/call_by_id",
+            "create_call": "/manager/cabapi_external/api/v1/phones/call/",
+            "delete_call": "/manager/cabapi_external/api/v1/phones/remove_call/",
+            "check_call_by_phone": "/manager/cabapi_external/api/v1/phones/call_by_id/",
         }
 
     @check_request

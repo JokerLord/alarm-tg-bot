@@ -82,6 +82,7 @@ def add_phone(user_id: int, phone: str) -> None:
     conn = get_connection()
     c = conn.cursor()
     c.execute("INSERT INTO phones (user_id, phone) VALUES (?, ?)", (user_id, phone))
+    conn.commit()
 
 
 def get_phone(user_id: int) -> tp.Optional[str]:
@@ -100,7 +101,7 @@ def get_phone(user_id: int) -> tp.Optional[str]:
     res = c.fetchall()
     if len(res) == 0:
         return None
-    return res[0]
+    return res[0][0]
 
 
 def get_phones_to_call(time: datetime.datetime) -> tp.List[str]:
