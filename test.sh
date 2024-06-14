@@ -2,5 +2,5 @@
 # Можно ли сделать это посимпатичнее
 
 flake8
-pydocstyle
-mypy .
+pydocstyle .
+python -m unittest -v tests/*.py
