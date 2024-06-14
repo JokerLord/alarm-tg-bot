@@ -23,7 +23,7 @@ class TestZvonokManagerClass(TestCase):
         with patch.object(self.zvonok_manager, "_ZvonokManager__requests_session", session):
             self.zvonok_manager.create_call("+11111111111")
             self.zvonok_manager._ZvonokManager__requests_session.post.assert_called_with(
-                "http://127.0.0.1:8080/manager/cabapi_external/api/v1/phones/call",
+                "http://127.0.0.1:8080/manager/cabapi_external/api/v1/phones/call/",
                 data={
                     "public_key": self.config.ZVONOK_API_TOKEN,
                     "phone": "+11111111111",
@@ -39,7 +39,7 @@ class TestZvonokManagerClass(TestCase):
         with patch.object(self.zvonok_manager, "_ZvonokManager__requests_session", session):
             self.zvonok_manager.delete_call("+11111111111")
             self.zvonok_manager._ZvonokManager__requests_session.post.assert_called_with(
-                "http://127.0.0.1:8080/manager/cabapi_external/api/v1/phones/remove_call",
+                "http://127.0.0.1:8080/manager/cabapi_external/api/v1/phones/remove_call/",
                 data={
                     "public_key": self.config.ZVONOK_API_TOKEN,
                     "phone": "+11111111111",
@@ -55,7 +55,7 @@ class TestZvonokManagerClass(TestCase):
         with patch.object(self.zvonok_manager, "_ZvonokManager__requests_session", session):
             self.zvonok_manager.check_call("+11111111111")
             self.zvonok_manager._ZvonokManager__requests_session.post.assert_called_with(
-                "http://127.0.0.1:8080/manager/cabapi_external/api/v1/phones/call_by_id",
+                "http://127.0.0.1:8080/manager/cabapi_external/api/v1/phones/call_by_id/",
                 data={
                     "public_key": self.config.ZVONOK_API_TOKEN,
                     "phone": "+11111111111",
