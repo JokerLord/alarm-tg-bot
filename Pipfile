@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+pytelegrambotapi = "*"
+requests = "*"
+
+[dev-packages]
+flake8 = "*"
+doit = "*"
+pydocstyle = "*"
+sphinx = "*"
+coverage = "*"
+babel = "*"
+
+[requires]
+python_version = "3.9"
