@@ -6,9 +6,9 @@ logs/
 build
 htmlcov/
 
-Pipfile
 Pipfile.lock
 .coverage
+.doit.db
 
 *.db
 *.pot

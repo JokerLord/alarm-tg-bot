@@ -19,7 +19,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.15.0\n"
 
-#: bot/Bot.py:74
+#: bot/Bot.py:73
 msgid ""
 "To set the call for N hours when urgent search fee appears use */call N* "
 "command"
@@ -27,7 +27,7 @@ msgstr ""
 "Чтобы поставить дозвон на N часов при появлении срочного сбора на поиск, "
 "воспользуйтесь командой */call N*"
 
-#: bot/Bot.py:94
+#: bot/Bot.py:93
 msgid ""
 "There is no information which phone to set call for.Send your phone "
 "number with the command */number* in bot private messages"
@@ -35,27 +35,27 @@ msgstr ""
 "Нет информации о том, на какой телефн поставить дозвон.Отправьте свой "
 "телефон командой */number* в личных сообщениях боту"
 
-#: bot/Bot.py:107
+#: bot/Bot.py:106
 msgid "Error in command: {}"
 msgstr "Ошибка в команде: {}"
 
-#: bot/Bot.py:120
+#: bot/Bot.py:119
 msgid "The call is set until "
 msgstr "Поставлен дозвон до "
 
-#: bot/Bot.py:153
+#: bot/Bot.py:152
 msgid "Send phone number"
 msgstr "Отправить телефон"
 
-#: bot/Bot.py:158
+#: bot/Bot.py:157
 msgid "Send your phone number by clicking the button"
 msgstr "Отправьте свой номер телефона нажав на кнопку"
 
-#: bot/Bot.py:166
+#: bot/Bot.py:165
 msgid "Your phone number is already saved in the database"
 msgstr "Ваш номер уже сохранен в базе данных"
 
-#: bot/Bot.py:181
+#: bot/Bot.py:180
 msgid "Phone number successfully added!"
 msgstr "Номер успешно добавлен!"
 
