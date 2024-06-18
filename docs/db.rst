@@ -1,3 +1,3 @@
-.. automodule:: db
+.. automodule:: AlarmCallBot.db
     :members:
     :private-members:

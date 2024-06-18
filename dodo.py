@@ -1,5 +1,10 @@
-"""f."""
-DOIT_CONFIG = {'default_tasks': ['check', 'html']}
+"""Default: create wheel."""
+import glob
+from doit.tools import create_folder
+
+
+DOIT_CONFIG = {'default_tasks': ['check', 'html', 'wheel']}
+PO_DEST = 'AlarmCallBot/po'
 
 
 def task_gitclean():
@@ -19,7 +24,7 @@ def task_html():
 def task_test():
     """Perform testing."""
     yield {
-        'actions': ['coverage run -m unittest -v tests/*.py'],
+        'actions': ['coverage run -m unittest -v'],
         'verbosity': 2,
         'name': 'run'
     }
@@ -33,14 +38,14 @@ def task_test():
 def task_docstyle():
     """Check docstrings against pydocstyle."""
     return {
-        'actions': ['pydocstyle .']
+        'actions': ['pydocstyle AlarmCallBot']
     }
 
 
 def task_codestyle():
     """Check codestyle against flake8."""
     return {
-        'actions': ['flake8']
+        'actions': ['flake8 AlarmCallBot']
     }
 
 
@@ -55,7 +60,9 @@ def task_check():
 def task_pot():
     """Re-create .pot."""
     return {
-        'actions': ['pybabel extract -o bot.pot bot']
+        'actions': ['pybabel extract -o bot.pot AlarmCallBot/bot'],
+        'file_dep': glob.glob('AlarmCallBot/*.py'),
+        'targets': ['bot.pot'],
     }
 
 
@@ -71,7 +78,10 @@ def task_po():
 def task_mo():
     """Compile translations."""
     return {
-        'actions': ['pybabel compile -D bot -l ru_RU.UTF-8 -d po -i po/ru_RU.UTF-8/LC_MESSAGES/bot.po'],
+        'actions': [
+            (create_folder, [f'{PO_DEST}/ru_RU.UTF-8/LC_MESSAGES']),
+            f'pybabel compile -D bot -l ru_RU.UTF-8 -d {PO_DEST} -i po/ru_RU.UTF-8/LC_MESSAGES/bot.po'
+        ],
         'file_dep': ['po/ru_RU.UTF-8/LC_MESSAGES/bot.po'],
-        'targets': ['po/ru_RU.UTF-8/LC_MESSAGES/bot.mo'],
+        'targets': [f'{PO_DEST}/ru_RU.UTF-8/LC_MESSAGES/bot.mo'],
     }

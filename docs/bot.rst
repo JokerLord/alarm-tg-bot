@@ -1,3 +1,3 @@
-.. automodule:: bot.Bot
+.. automodule:: AlarmCallBot.bot.Bot
     :members:
     :private-members:

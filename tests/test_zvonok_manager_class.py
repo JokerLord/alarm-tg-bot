@@ -1,8 +1,8 @@
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
-from zvonok_api.Api import ZvonokManager
-from configs import Config
+from AlarmCallBot.zvonok_api.Api import ZvonokManager
+from AlarmCallBot.configs import Config
 
 
 class TestZvonokManagerClass(TestCase):

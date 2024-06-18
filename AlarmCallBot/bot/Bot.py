@@ -1,7 +1,7 @@
 """Alarm call bot class module."""
 import os
 import logging
-import db
+
 import typing as tp
 
 from datetime import datetime, timedelta
@@ -9,9 +9,10 @@ from datetime import datetime, timedelta
 import telebot
 from telebot import types
 
-from configs import Config
-from zvonok_api.Api import ZvonokManager
-from bot.Utils import _, check_private_chat, parse_call_hours
+from .. import db
+from ..configs import Config
+from ..zvonok_api.Api import ZvonokManager
+from .Utils import _, check_private_chat, parse_call_hours
 
 logger = logging.getLogger(__name__)
 

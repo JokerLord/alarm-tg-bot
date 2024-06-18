@@ -1,0 +1,1 @@
+"""AlarmCallBot package."""

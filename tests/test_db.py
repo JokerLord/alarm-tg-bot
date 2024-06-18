@@ -2,7 +2,7 @@ import datetime
 import sqlite3
 from unittest import TestCase
 
-import db
+from AlarmCallBot import db
 
 
 class TestDataBaseClass(TestCase):

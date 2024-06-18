@@ -4,7 +4,7 @@ import requests
 import typing as tp
 from requests.adapters import HTTPAdapter, Retry
 
-from zvonok_api.Utils import check_request
+from .Utils import check_request
 
 logger = logging.getLogger(__name__)
 

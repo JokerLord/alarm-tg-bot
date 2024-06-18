@@ -4,8 +4,8 @@ import logging.config
 import os
 from logging.handlers import TimedRotatingFileHandler
 
-from bot.Bot import AlarmCallBot
-from configs import Config
+from .bot.Bot import AlarmCallBot
+from .configs import Config
 
 
 def parse_args() -> argparse.Namespace:
