@@ -1,10 +1,19 @@
 """Default: create wheel."""
 import glob
 from doit.tools import create_folder
+import tomllib
 
 
 DOIT_CONFIG = {'default_tasks': ['check', 'html', 'wheel']}
 PO_DEST = 'AlarmCallBot/po'
+
+
+def dumpkeys(infile, table, outfile):
+    """Dumps TOML table keys one per line"""
+    with open(infile, "rb") as fin:
+        full = tomllib.load(fin)
+    with open(outfile, "w") as fout:
+        print(*full[table], sep="\n", file=fout)
 
 
 def task_gitclean():
@@ -84,4 +93,21 @@ def task_mo():
         ],
         'file_dep': ['po/ru_RU.UTF-8/LC_MESSAGES/bot.po'],
         'targets': [f'{PO_DEST}/ru_RU.UTF-8/LC_MESSAGES/bot.mo'],
+    }
+
+
+def task_requirements():
+    """Dump Pipfile requirements."""
+    return {
+        'actions': [(dumpkeys, ["Pipfile", "packages", "requirements.txt"])],
+        'file_dep': ['Pipfile'],
+        'targets': ['requirements.txt']
+    }
+
+
+def task_wheel():
+    """Create binary wheel distribution."""
+    return {
+        'actions': ['python -m build -n -w'],
+        'task_dep': ['mo', 'requirements']
     }

@@ -1,0 +1,22 @@
+[project]
+name = "AlarmCallBot"
+version = "0.0.1"
+description = "Telegram bot assistant for search groups"
+readme = "Readme.md"
+authors = [
+    {name = "Murad Bagamaev", email = "true.barsuk@yandex.ru"}
+]
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = "requirements.txt" }
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.package-dir]
+AlarmCallBot = "AlarmCallBot"
+
+[tool.setuptools.package-data]
+AlarmCallBot = ["po/*/*/*.mo"]

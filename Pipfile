@@ -4,16 +4,18 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-pytelegrambotapi = "*"
 requests = "*"
+pytelegrambotapi = "*"
 
 [dev-packages]
-flake8 = "*"
 doit = "*"
+flake8 = "*"
 pydocstyle = "*"
-sphinx = "*"
+wheel = "*"
+build = "*"
 coverage = "*"
+sphinx = "*"
 babel = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.12"
